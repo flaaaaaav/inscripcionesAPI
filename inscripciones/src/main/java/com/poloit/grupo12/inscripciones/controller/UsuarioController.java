@@ -1,7 +1,9 @@
 package com.poloit.grupo12.inscripciones.controller;
 
-import com.poloit.grupo12.inscripciones.dto.OngDTO;
-import com.poloit.grupo12.inscripciones.service.interfaces.IOngService;
+import com.poloit.grupo12.inscripciones.dto.MentorDTO;
+import com.poloit.grupo12.inscripciones.dto.UsuarioDTO;
+import com.poloit.grupo12.inscripciones.service.implementacion.MentorService;
+import com.poloit.grupo12.inscripciones.service.implementacion.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,15 +13,16 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/ong")
-public class OngController {
+@RequestMapping("/api/usuario")
+public class UsuarioController {
+
 
     @Autowired
-    private IOngService service;
+    private UsuarioService service;
 
     @GetMapping("/listar")
     public ResponseEntity<?> findAll() {
-        List<OngDTO> lista = service.findAll();
+        List<UsuarioDTO> lista = service.findAll();
         if (!lista.isEmpty()) {
             return ResponseEntity.ok(lista);
         } else {
@@ -30,48 +33,50 @@ public class OngController {
 
     @GetMapping("obtener/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        Optional<OngDTO> opt = Optional.ofNullable(service.findById(id));
-        if (opt.isPresent()) {
-            return ResponseEntity.ok(opt.get());
+        Optional<UsuarioDTO> optDTO = Optional.ofNullable(service.findById(id));
+        if (optDTO.isPresent()) {
+            return ResponseEntity.ok(optDTO);
         } else {
-            String mensajeError = "No se encontro la ONG con ID " + id;
+            String mensajeError = "No se encontro el usuario con ID " + id;
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensajeError);
         }
     }
 
     @PostMapping("/crear")
-    public ResponseEntity<?> create(@RequestBody OngDTO ongDTO) {
+    public ResponseEntity<?> create(@RequestBody UsuarioDTO usuarioDTO) {
         try {
-            OngDTO nuevaOng = service.save(ongDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body(nuevaOng);
+            UsuarioDTO nuevoMentor = service.save(usuarioDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nuevoMentor);
         } catch (Exception e) {
-            String mensajeError = "Ocurrió un error al crear la ONG " + ongDTO.getNombre();
+            String mensajeError = "Ocurrió un error al crear el usuario";
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(mensajeError);
         }
     }
 
     @PutMapping("/editar/{id}")
-    public ResponseEntity<?> update(@RequestBody OngDTO ongDTO,
-                                    @PathVariable Long id) {
+    public ResponseEntity<?> update(@RequestBody UsuarioDTO usuarioDTO,
+                                  @PathVariable Long id) {
         if (service.findById(id) != null) {
-            OngDTO OngEditada = service.update(id, ongDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body(OngEditada);
+            UsuarioDTO usuarioEditado = service.update(id, usuarioDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioEditado);
         } else {
-            String mensajeError = "No se encontro la ONG con ID " + id;
+            String mensajeError = "No se encontro el usuario con ID " + id;
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensajeError);
         }
     }
+
     @DeleteMapping("/borrar/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         if (service.findById(id) != null) {
             service.delete(id);
-            String mensajeOk = "Se elimino la ONG con ID " + id;
+            String mensajeOk = "Se elimino el usuario con el ID " + id;
             return ResponseEntity.ok(mensajeOk);
 
         } else {
-            String mensajeError = "No se encontro la ONG con ID " + id;
+            String mensajeError = "No se encontro el usuario con el ID " + id;
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensajeError);
         }
     }
+
 
 }

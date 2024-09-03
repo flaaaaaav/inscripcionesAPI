@@ -1,5 +1,6 @@
 package com.poloit.grupo12.inscripciones.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +20,9 @@ public class Usuario {
     private String nombre;
     private String apellido;
     private String email;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
     private Date fechaNacimiento;
 
     @ManyToOne
@@ -32,4 +36,5 @@ public class Usuario {
         this.fechaNacimiento = fechaNacimiento;
         this.rol = rol;
     }
+
 }

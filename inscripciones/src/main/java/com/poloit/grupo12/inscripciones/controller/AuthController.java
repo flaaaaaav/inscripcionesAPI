@@ -1,12 +1,12 @@
 package com.poloit.grupo12.inscripciones.controller;
 
 import com.poloit.grupo12.inscripciones.model.Usuario;
-import com.poloit.grupo12.inscripciones.service.UsuarioService;
+import com.poloit.grupo12.inscripciones.service.implementacion.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.poloit.grupo12.inscripciones.dto.UsuarioDTO;
 import com.poloit.grupo12.inscripciones.model.Rol;
-import com.poloit.grupo12.inscripciones.service.RolService;
+import com.poloit.grupo12.inscripciones.service.implementacion.RolService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
