@@ -1,5 +1,6 @@
 package com.poloit.grupo12.inscripciones;
 
+import com.poloit.grupo12.inscripciones.dto.UsuarioDTO;
 import com.poloit.grupo12.inscripciones.model.Rol;
 import com.poloit.grupo12.inscripciones.model.Usuario;
 import com.poloit.grupo12.inscripciones.model.Credencial;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import java.util.Date;
+import java.util.Optional;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -36,12 +38,27 @@ public class DataLoader implements CommandLineRunner {
         }
         if (!usuarioRepository.existsById(1L)) {
             // Crear usuario admin
-            Usuario adminUser = new Usuario("Admin", "User", "lalala@gmail.com", new Date(), rolRepository.findById(1L).orElse(null));
+            Usuario adminUser = new Usuario("Admin", "User", "lalala@gmail.com", new Date(),
+                    rolRepository.findById(1L).orElse(null));
             usuarioRepository.save(adminUser);
 
             // Crear credenciales para el usuario admin
             Credencial adminCred = new Credencial("admin_user", "admin_pass", adminUser);
             credencialRepository.save(adminCred);
         }
+        //Crear 100 usuarios para pruebas
+/*
+        for (int i = 0; i < 100; i++) {
+            Usuario u = new Usuario();
+            u.setNombre("usuario nro " + i);
+            u.setApellido("perez" + i);
+            u.setEmail(i + "@mail.com");
+            u.setRol(rolRepository.findById(1L).orElse(null));
+            u.setFechaNacimiento(new Date());
+
+            usuarioRepository.save(u);
+        }
+        */
+
     }
 }

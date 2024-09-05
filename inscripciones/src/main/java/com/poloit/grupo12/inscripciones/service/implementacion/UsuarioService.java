@@ -8,26 +8,21 @@ import com.poloit.grupo12.inscripciones.repository.IUsuarioRepository;
 import com.poloit.grupo12.inscripciones.service.interfaces.IUsuarioSevice;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 @Service
 public class UsuarioService implements IUsuarioSevice {
-
     @Autowired
     private IUsuarioRepository usuarioRepository;
     @Autowired
     private IRolRepository rolRepository;
 
     @Override
-    public List<UsuarioDTO> findAll() {
-        List<Usuario> usuarios = usuarioRepository.findAll();
-        return usuarios.stream()
-                .map(usuario -> convertToDto(usuario))
-                .collect(Collectors.toList());
+    public Page<UsuarioDTO> findAll(Pageable pageable) {
+        Page<Usuario> usuarios = usuarioRepository.findAll(pageable);
+        return usuarios.map(this::convertToDto);
     }
 
     @Override
@@ -72,11 +67,9 @@ public class UsuarioService implements IUsuarioSevice {
     public Usuario save(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
-
     public Usuario findByEmail(String email) {
         return usuarioRepository.findByEmail(email);
     }
-
     private UsuarioDTO convertToDto(Usuario usuario) {
         ModelMapper mapper = new ModelMapper();
         UsuarioDTO usuarioDTO = mapper.map(usuario, UsuarioDTO.class);

@@ -1,34 +1,28 @@
 package com.poloit.grupo12.inscripciones.controller;
 
-import com.poloit.grupo12.inscripciones.dto.MentorDTO;
 import com.poloit.grupo12.inscripciones.dto.UsuarioDTO;
-import com.poloit.grupo12.inscripciones.service.implementacion.MentorService;
 import com.poloit.grupo12.inscripciones.service.implementacion.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/usuario")
 public class UsuarioController {
-
-
     @Autowired
     private UsuarioService service;
 
     @GetMapping("/listar")
-    public ResponseEntity<?> findAll() {
-        List<UsuarioDTO> lista = service.findAll();
-        if (!lista.isEmpty()) {
-            return ResponseEntity.ok(lista);
-        } else {
-            String mensajeError = "La tabla no contiene datos para mostrar";
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensajeError);
+    public ResponseEntity<?> findAll(Pageable pageable) {
+       Page<UsuarioDTO> lista = service.findAll(pageable);
+       if (lista.isEmpty()) {
+           return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Page.empty());
         }
+        return ResponseEntity.ok(lista);
     }
 
     @GetMapping("obtener/{id}")

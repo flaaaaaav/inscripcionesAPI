@@ -8,15 +8,12 @@ import com.poloit.grupo12.inscripciones.repository.IOngRepository;
 import com.poloit.grupo12.inscripciones.service.interfaces.ICursoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 @Service
 public class CursoService implements ICursoService {
-
     @Autowired
     private ICursoRepository cursoRepository;
     @Autowired
@@ -25,11 +22,9 @@ public class CursoService implements ICursoService {
     private IMentorRepository mentorRepository;
 
     @Override
-    public List<CursoDTO> findAll() {
-        List<Curso> cursos = cursoRepository.findAll();
-        return cursos.stream()
-                .map(curso -> convertToDto((curso)))
-                .collect(Collectors.toList());
+    public Page<CursoDTO> findAll(Pageable pageable) {
+        Page<Curso> cursos = cursoRepository.findAll(pageable);
+        return cursos.map(this::convertToDto);
     }
 
     @Override
@@ -74,7 +69,6 @@ public class CursoService implements ICursoService {
     public void delete(Long id) {
         cursoRepository.deleteById(id);
     }
-
     private CursoDTO convertToDto(Curso curso) {
         ModelMapper mapper = new ModelMapper();
         CursoDTO cursoDTO = mapper.map(curso, CursoDTO.class);

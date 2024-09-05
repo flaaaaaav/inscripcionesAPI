@@ -8,12 +8,10 @@ import com.poloit.grupo12.inscripciones.repository.IUsuarioRepository;
 import com.poloit.grupo12.inscripciones.service.interfaces.IMentorService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 @Service
 public class MentorService implements IMentorService {
     @Autowired
@@ -23,11 +21,9 @@ public class MentorService implements IMentorService {
     private IUsuarioRepository usuarioRepository;
 
     @Override
-    public List<MentorDTO> findAll() {
-        List<Mentor> mentores = mentorRepository.findAll();
-        return mentores.stream()
-                .map(mentor -> convertToDto(mentor))
-                .collect(Collectors.toList());
+    public Page<MentorDTO> findAll(Pageable pageable) {
+        Page<Mentor> mentores = mentorRepository.findAll(pageable);
+        return mentores.map(this::convertToDto);
     }
 
     @Override

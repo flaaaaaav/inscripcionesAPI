@@ -6,23 +6,18 @@ import com.poloit.grupo12.inscripciones.repository.IOngRepository;
 import com.poloit.grupo12.inscripciones.service.interfaces.IOngService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 @Service
 public class OngService implements IOngService {
-
     @Autowired
     private IOngRepository repository;
     @Override
-    public List<OngDTO> findAll() {
-        ModelMapper mapper = new ModelMapper();
-        return repository.findAll()
-                .stream()
-                .map(entity -> mapper.map(entity, OngDTO.class))
-                .collect(Collectors.toList());
+    public Page<OngDTO> findAll(Pageable pageable) {
+        Page<Ong> ongs = repository.findAll(pageable);
+        return ongs.map(this::converToDto);
     }
 
     @Override
@@ -65,6 +60,11 @@ public class OngService implements IOngService {
     @Override
     public void delete(Long id) {
         repository.deleteById(id);
+    }
+    private OngDTO converToDto(Ong ong) {
+        ModelMapper mapper = new ModelMapper();
+        OngDTO ongDTO = mapper.map(ong, OngDTO.class);
+        return ongDTO;
     }
 
 }
