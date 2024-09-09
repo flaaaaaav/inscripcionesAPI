@@ -13,12 +13,16 @@ public class CursoDTO {
     private Long id;
     private String titulo;
     private String descripcion;
+    private String categoria; // Nuevo campo
+
+    private String url;
+    private String lenguaje;
+    private int duracion;
+    private int semanal;  // Almacena como número
+
     private Date fechaInicio;
     private Date fechaFin;
     private Long ongId;
     private String ongNombre;
     private Long mentorId;
-    //ver la relacion entre tablas
-    //private String usuarioNombre;
-    //private String usuarioApellido;
 }

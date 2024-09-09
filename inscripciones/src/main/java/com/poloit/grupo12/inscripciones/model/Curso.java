@@ -22,9 +22,17 @@ public class Curso {
     private Long id;
     private String titulo;
     private String descripcion;
+    private String categoria; // Nuevo campo
+
+    private String url;
+    private String lenguaje;
+    private int duracion;
+    private int semanal;  // Almacena como número (0 o 1)
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date fechaInicio;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date fechaFin;
@@ -36,5 +44,4 @@ public class Curso {
     @ManyToOne
     @JoinColumn(name = "mentor_id", referencedColumnName = "id")
     private Mentor mentor;
-
 }
