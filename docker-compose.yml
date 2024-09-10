@@ -4,6 +4,7 @@ services:
   inscripciones:
     build:
       context: ./inscripciones
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     environment:
